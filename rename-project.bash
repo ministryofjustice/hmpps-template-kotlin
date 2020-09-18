@@ -21,8 +21,8 @@ PROJECT_NAME=${PROJECT_NAME_HYPHENS//[^a-z0-9-]/}     # remove all other charact
 PACKAGE_NAME=${PROJECT_NAME//-/}                      # remove hyphen
 
 read -ra PROJECT_NAME_ARRAY <<<"${PROJECT_NAME//-/ }" # convert to array
-PROJECT_DESCRIPTION=${PROJECT_NAME_ARRAY[*]^}      # convert array back to string thus capitalising first character
-CLASS_NAME=${PROJECT_DESCRIPTION// /}              # then remove spaces
+PROJECT_DESCRIPTION=${PROJECT_NAME_ARRAY[*]^}         # convert array back to string thus capitalising first character
+CLASS_NAME=${PROJECT_DESCRIPTION// /}                 # then remove spaces
 
 echo "Found:      Project of $PROJECT_DESCRIPTION"
 echo "       Project name of $PROJECT_NAME"
@@ -49,6 +49,10 @@ mv "src/main/${BASE}/hmppstemplatepackagename" "src/main/$BASE/$PACKAGE_NAME"
 
 # and move helm stuff to new name
 mv "helm_deploy/hmpps-template-kotlin" "helm_deploy/$PROJECT_NAME"
+
+# rename kotlin files
+mv "src/main/$BASE/$PACKAGE_NAME/HmppsTemplateKotlin.kt" "src/main/$BASE/$PACKAGE_NAME/$CLASS_NAME.kt"
+mv "src/main/$BASE/$PACKAGE_NAME/config/HmppsTemplateKotlinExceptionHandler.kt" "src/main/$BASE/$PACKAGE_NAME/config/${CLASS_NAME}ExceptionHandler.kt"
 
 # lastly remove ourselves
 rm rename-project.bash
