@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   owasp: entur/owasp@0.0.14
-  hmpps: ministryofjustice/hmpps@3.0
+  hmpps: ministryofjustice/hmpps@alpha
 
 jobs:
   validate:
@@ -39,7 +39,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - test
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -47,7 +47,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - test
           requires:
             - validate
             - build_docker
@@ -85,7 +85,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - test
     jobs:
       - owasp/gradle_owasp_dependency_check:
           executor: hmpps/java
