@@ -52,8 +52,6 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
-          slack_notification: true
-          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
           context: hmpps-common-vars
           filters:
             branches:
