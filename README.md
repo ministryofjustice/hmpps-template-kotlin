@@ -7,7 +7,7 @@ This is a skeleton project from which to create new kotlin projects from.
 If this is a Digital Prison Services project then the project will be created as part of bootstrapping - 
 see https://github.com/ministryofjustice/dps-project-bootstrap.
 
-# Creating a CloudPlatform namespace
+## Creating a CloudPlatform namespace
 
 When deploying to a new namespace, you may wish to use this template kotlin project namespace as the basis for your new namespace:
 
