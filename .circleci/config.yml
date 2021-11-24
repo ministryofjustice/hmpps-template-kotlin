@@ -98,14 +98,17 @@ workflows:
                 - main
     jobs:
       - hmpps/gradle_owasp_dependency_check:
+          slack_channel: hmpps_tech_alerts_security
           slack_channel: << pipeline.parameters.alerts-slack-channel >>
           context:
             - hmpps-common-vars
       - hmpps/trivy_latest_scan:
+          slack_channel: hmpps_tech_alerts_security
           slack_channel: << pipeline.parameters.alerts-slack-channel >>
           context:
             - hmpps-common-vars
       - hmpps/veracode_pipeline_scan:
+          slack_channel: hmpps_tech_alerts_security
           slack_channel: << pipeline.parameters.alerts-slack-channel >>
           context:
             - veracode-credentials
@@ -120,6 +123,7 @@ workflows:
                 - main
     jobs:
       - hmpps/veracode_policy_scan:
+          slack_channel: hmpps_tech_alerts_security
           slack_channel: << pipeline.parameters.alerts-slack-channel >>
           context:
             - veracode-credentials
