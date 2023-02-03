@@ -32,9 +32,9 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
-  testing-veracode-policy-scan:
+  testing-veracode-pipeline-scan:
     docker:
-      - image: 'veracode/api-wrapper-java:latest'
+      - image: 'veracode/pipeline-scan:latest'
     executor:
       name: hmpps/java
       tag: "19.0"
@@ -42,17 +42,16 @@ jobs:
       - run:
           name: "Upload to Veracode"
           command: |
-            java -jar /opt/veracode/api-wrapper.jar \
-            -vid "${VERACODE_API_ID}" \
-            -vkey "${VERACODE_API_KEY}" \
-            -teams "hmpps-tech" \
-            -action UploadAndScan \
-            -appname ${CIRCLE_PROJECT_REPONAME} \
-            -createprofile true \
-            -deleteincompletescan 2 \
-            -version "CircleCI-${CIRCLE_BUILD_NUM}" \
-            -filepath source.zip \
-            2>&1 | tee output.txt
+            java -jar /opt/veracode/pipeline-scan.jar \
+            $(test -f results.json && echo "--baseline_file results.json") \
+            --json_output true \
+            --file source.zip \
+            --policy_file Ministry_of_Justice.json \
+            --veracode_api_id "${VERACODE_API_ID}" \
+            --veracode_api_key "${VERACODE_API_KEY}" \
+            --timeout 60 \
+            --issue_details false \
+            --summary_output true
 
 workflows:
   version: 2
@@ -62,7 +61,7 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - testing-veracode-policy-scan:
+      - testing-veracode-pipeline-scan:
           context:
             - veracode-credentials
             - hmpps-common-vars
