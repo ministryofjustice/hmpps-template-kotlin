@@ -32,12 +32,40 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
+  testing-veracode-policy-scan:
+    docker:
+      - image: 'veracode/api-wrapper-java:latest'
+    executor:
+      name: hmpps/java
+      tag: "19.0"
+    steps:
+      - run:
+          name: "Upload to Veracode"
+          command: |
+            java -jar /opt/veracode/api-wrapper.jar \
+            -vid "${VERACODE_API_ID}" \
+            -vkey "${VERACODE_API_KEY}" \
+            -teams "hmpps-tech" \
+            -action UploadAndScan \
+            -appname ${CIRCLE_PROJECT_REPONAME} \
+            -createprofile true \
+            -deleteincompletescan 2 \
+            -version "CircleCI-${CIRCLE_BUILD_NUM}" \
+            -filepath source.zip \
+            2>&1 | tee output.txt
 
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
       - validate:
+          filters:
+            tags:
+              ignore: /.*/
+      - testing-veracode-policy-scan:
+          context:
+            - veracode-credentials
+            - hmpps-common-vars
           filters:
             tags:
               ignore: /.*/
@@ -63,38 +91,38 @@ workflows:
             - build_docker
             - helm_lint
           helm_timeout: 5m
-#      - request-preprod-approval:
-#          type: approval
-#          requires:
-#            - deploy_dev
-#      - hmpps/deploy_env:
-#          name: deploy_preprod
-#          env: "preprod"
-#          jira_update: true
-#          jira_env_type: staging
-#          context:
-#            - hmpps-common-vars
-#            - hmpps-template-kotlin-preprod
-#          requires:
-#            - request-preprod-approval
-#          helm_timeout: 5m
-#      - request-prod-approval:
-#          type: approval
-#          requires:
-#            - deploy_preprod
-#      - hmpps/deploy_env:
-#          name: deploy_prod
-#          env: "prod"
-#          jira_update: true
-#          jira_env_type: production
-#          slack_notification: true
-#          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
-#          context:
-#            - hmpps-common-vars
-#            - hmpps-template-kotlin-prod
-#          requires:
-#            - request-prod-approval
-#          helm_timeout: 5m
+  #      - request-preprod-approval:
+  #          type: approval
+  #          requires:
+  #            - deploy_dev
+  #      - hmpps/deploy_env:
+  #          name: deploy_preprod
+  #          env: "preprod"
+  #          jira_update: true
+  #          jira_env_type: staging
+  #          context:
+  #            - hmpps-common-vars
+  #            - hmpps-template-kotlin-preprod
+  #          requires:
+  #            - request-preprod-approval
+  #          helm_timeout: 5m
+  #      - request-prod-approval:
+  #          type: approval
+  #          requires:
+  #            - deploy_preprod
+  #      - hmpps/deploy_env:
+  #          name: deploy_prod
+  #          env: "prod"
+  #          jira_update: true
+  #          jira_env_type: production
+  #          slack_notification: true
+  #          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
+  #          context:
+  #            - hmpps-common-vars
+  #            - hmpps-template-kotlin-prod
+  #          requires:
+  #            - request-prod-approval
+  #          helm_timeout: 5m
 
   security:
     triggers:
@@ -132,5 +160,3 @@ workflows:
           context:
             - veracode-credentials
             - hmpps-common-vars
-
-
