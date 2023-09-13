@@ -34,8 +34,6 @@ class InfoTest : IntegrationTestBase() {
     webTestClient.get().uri("/info")
       .exchange()
       .expectStatus().isOk
-      .expectBody().jsonPath("productId").value<String> {
-        assertThat(it).isEqualTo("0001")
-      }
+      .expectBody().jsonPath("productId").isEqualTo("0001")
   }
 }
