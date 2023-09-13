@@ -18,6 +18,9 @@ spring:
       test:
         - "stdout"
 
+application:
+  product-id: ${productId:default}
+
 server:
   port: 8080
   servlet:
@@ -49,3 +52,4 @@ management:
     info:
       cache:
         time-to-live: 2000ms
+

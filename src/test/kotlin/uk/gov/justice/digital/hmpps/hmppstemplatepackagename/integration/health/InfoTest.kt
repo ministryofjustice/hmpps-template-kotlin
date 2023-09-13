@@ -28,4 +28,14 @@ class InfoTest : IntegrationTestBase() {
         assertThat(it).startsWith(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE))
       }
   }
+
+  @Test
+  fun `Info page reports product id`() {
+    webTestClient.get().uri("/info")
+      .exchange()
+      .expectStatus().isOk
+      .expectBody().jsonPath("productId").value<String> {
+        assertThat(it).isEqualTo("0001")
+      }
+  }
 }
