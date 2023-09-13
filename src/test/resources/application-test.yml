@@ -4,6 +4,3 @@ server:
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
-
-application:
-  productId: "0001"
