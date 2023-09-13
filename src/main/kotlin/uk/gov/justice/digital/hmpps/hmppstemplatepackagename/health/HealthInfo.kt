@@ -19,7 +19,7 @@ class HealthInfo(buildProperties: BuildProperties) : HealthIndicator {
 }
 
 @Component
-class MyInfoContributor(@Value("\${application.product-id}") private val productId: String? = null) : InfoContributor {
+class MyInfoContributor(@Value("\${application.productId}") private val productId: String) : InfoContributor {
 
   override fun contribute(builder: Info.Builder) {
     builder.withDetail("productId", productId)

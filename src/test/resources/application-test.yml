@@ -6,4 +6,4 @@ management.endpoint:
   info.cache.time-to-live: 0
 
 application:
-  product-id: "0001"
+  productId: "0001"

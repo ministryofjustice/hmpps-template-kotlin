@@ -19,7 +19,7 @@ spring:
         - "stdout"
 
 application:
-  product-id: ${productId:default}
+  productId: ${productId:default}
 
 server:
   port: 8080
