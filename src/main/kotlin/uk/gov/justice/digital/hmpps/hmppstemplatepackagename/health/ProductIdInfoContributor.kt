@@ -6,7 +6,7 @@ import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.stereotype.Component
 
 @Component
-class ProductIdInfoContributor(@Value("\${product-Id:default}") private val productId: String) : InfoContributor {
+class ProductIdInfoContributor(@Value("\${product-id:default}") private val productId: String) : InfoContributor {
 
   override fun contribute(builder: Info.Builder) {
     builder.withDetail("productId", productId)
