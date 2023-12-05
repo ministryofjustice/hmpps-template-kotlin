@@ -10,6 +10,10 @@ fi
 
 if [[ $# -ge 1 ]]; then
   PROJECT_INPUT=$1
+  SLACK_RELEASES_CHANNEL=$2
+  PIPELINE_SECURITY_SLACK_CHANNEL=$3
+  NON_PROD_ALERTS_SEVERITY_LABEL=$4
+  PROD_ALERTS_SEVERITY_LABEL=$5
 else
   read -rp "New project name e.g. prison-visits >" PROJECT_INPUT
 fi
@@ -50,6 +54,11 @@ mv "src/main/${BASE}/hmppstemplatepackagename" "src/main/$BASE/$PACKAGE_NAME"
 # and move helm stuff to new name
 mv "helm_deploy/hmpps-template-kotlin" "helm_deploy/$PROJECT_NAME"
 
+# Update helm values files with correct slack channels.
+sed -i -z -E \
+  -e "s/NON_PROD_ALERTS_SEVERITY_LABEL/$NON_PROD_ALERTS_SEVERITY_LABEL/" \
+  helm_deploy/values-dev.yaml helm_deploy/values-preprod.yaml
+
 # rename kotlin files
 mv "src/main/$BASE/$PACKAGE_NAME/HmppsTemplateKotlin.kt" "src/main/$BASE/$PACKAGE_NAME/$CLASS_NAME.kt"
 mv "src/main/$BASE/$PACKAGE_NAME/config/HmppsTemplateKotlinExceptionHandler.kt" "src/main/$BASE/$PACKAGE_NAME/config/${CLASS_NAME}ExceptionHandler.kt"
@@ -61,6 +70,7 @@ RANDOM_MINUTE2=$(($RANDOM%60))
 sed -i -z -E \
   -e "s/security:\n    triggers:\n      - schedule:\n          cron: \"11 5/security:\n    triggers:\n      - schedule:\n          cron: \"$RANDOM_MINUTE $RANDOM_HOUR/" \
   -e "s/security-weekly:\n    triggers:\n      - schedule:\n          cron: \"0 5/security-weekly:\n    triggers:\n      - schedule:\n          cron: \"$RANDOM_MINUTE2 $RANDOM_HOUR/" \
+  -e "s/SLACK_RELEASES_CHANNEL/$SLACK_RELEASES_CHANNEL/" \
   .circleci/config.yml
 
 
