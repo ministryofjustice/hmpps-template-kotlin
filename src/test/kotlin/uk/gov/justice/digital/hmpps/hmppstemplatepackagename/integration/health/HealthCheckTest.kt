@@ -2,15 +2,22 @@ package uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.health
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.IntegrationTestBase
+import uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.wiremock.HmppsAuthApiExtension
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.function.Consumer
 
+@ExtendWith(
+  HmppsAuthApiExtension::class,
+)
 class HealthCheckTest : IntegrationTestBase() {
 
   @Test
   fun `Health page reports ok`() {
+    stubPingWithResponse(200)
+
     webTestClient.get()
       .uri("/health")
       .exchange()
@@ -18,10 +25,26 @@ class HealthCheckTest : IntegrationTestBase() {
       .isOk
       .expectBody()
       .jsonPath("status").isEqualTo("UP")
+      .jsonPath("components.hmppsAuthApi.status").isEqualTo("UP")
+  }
+
+  @Test
+  fun `Health page reports down`() {
+    stubPingWithResponse(404)
+
+    webTestClient.get()
+      .uri("/health")
+      .exchange()
+      .expectStatus().is5xxServerError
+      .expectBody()
+      .jsonPath("status").isEqualTo("DOWN")
+      .jsonPath("components.hmppsAuthApi.status").isEqualTo("DOWN")
   }
 
   @Test
   fun `Health info reports version`() {
+    stubPingWithResponse(200)
+
     webTestClient.get().uri("/health")
       .exchange()
       .expectStatus().isOk
@@ -63,5 +86,9 @@ class HealthCheckTest : IntegrationTestBase() {
       .isOk
       .expectBody()
       .jsonPath("status").isEqualTo("UP")
+  }
+
+  private fun stubPingWithResponse(status: Int) {
+    HmppsAuthApiExtension.hmppsAuth.stubHealthPing(status)
   }
 }

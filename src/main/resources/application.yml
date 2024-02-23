@@ -13,6 +13,26 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${api.base.url.oauth}/.well-known/jwks.json
+
+      client:
+        provider:
+          hmpps-auth:
+            token-uri: ${api.base.url.oauth}/oauth/token
+# TODO this provides a template for registering client credentials - only add prison-api if you need it
+#        registration:
+#          prison-api:
+#            provider: hmpps-auth
+#            client-id: ${prison-api.client.id}
+#            client-secret: ${prison-api.client.secret}
+#            authorization-grant-type: client_credentials
+#            scope: read
+
+
 server:
   port: 8080
   servlet:

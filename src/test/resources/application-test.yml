@@ -4,3 +4,6 @@ server:
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
+
+api.base.url:
+  oauth: http://localhost:8090/auth
