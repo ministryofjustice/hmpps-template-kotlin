@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 
+/**
+ * TODO
+ * This is just an example of what a secured endpoint might look like.
+ * Remove this class and associated tests in [TimeResourceIntTest] and replace with your own implementation.
+ */
 @RestController
 @RequestMapping("/time")
 class TimeResource {
