@@ -7,12 +7,20 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.resource.NoResourceFoundException
+import uk.gov.justice.hmpps.kotlin.common.ErrorResponse
 
 @RestControllerAdvice
 class HmppsTemplateKotlinExceptionHandler {
+  @ExceptionHandler(AccessDeniedException::class)
+  fun handleAccessDeniedException(e: AccessDeniedException): ResponseEntity<ErrorResponse> = ResponseEntity
+    .status(HttpStatus.FORBIDDEN)
+    .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value()))
+    .also { log.debug("Forbidden (403) returned", e) }
+
   @ExceptionHandler(ValidationException::class)
   fun handleValidationException(e: ValidationException): ResponseEntity<ErrorResponse> = ResponseEntity
     .status(BAD_REQUEST)
@@ -49,21 +57,4 @@ class HmppsTemplateKotlinExceptionHandler {
   private companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
-}
-
-data class ErrorResponse(
-  val status: Int,
-  val errorCode: Int? = null,
-  val userMessage: String? = null,
-  val developerMessage: String? = null,
-  val moreInfo: String? = null,
-) {
-  constructor(
-    status: HttpStatus,
-    errorCode: Int? = null,
-    userMessage: String? = null,
-    developerMessage: String? = null,
-    moreInfo: String? = null,
-  ) :
-    this(status.value(), errorCode, userMessage, developerMessage, moreInfo)
 }
