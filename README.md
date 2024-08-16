@@ -50,7 +50,7 @@ The Service Catalogue contains a list of these IDs and is currently in developme
 
 ## Example Resources
 
-There is an `ExampleResource` that includes best practice and also serves as a spring security example.  The template
+There is an `ExampleResource` and `ExampleSecondResource` that includes best practice and also serve as spring security examples.  The template
 typescript project has a demonstration that calls this endpoint as well.
 
 For the demonstration, rather than introducing a dependency on a different service, this application calls out to
