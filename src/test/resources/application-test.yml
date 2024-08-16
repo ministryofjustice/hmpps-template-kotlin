@@ -6,3 +6,10 @@ management.endpoint:
   info.cache.time-to-live: 0
 
 hmpps-auth.url: "http://localhost:8090/auth"
+
+# example client configuration for calling out to other services
+template-kotlin-api:
+  url: "http://localhost:8091"
+  client:
+    id: "template-kotlin-api-client"
+    secret: "template-kotlin-api-client-secret"

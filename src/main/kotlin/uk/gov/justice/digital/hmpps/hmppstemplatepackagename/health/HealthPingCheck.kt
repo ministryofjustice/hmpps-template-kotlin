@@ -7,3 +7,7 @@ import uk.gov.justice.hmpps.kotlin.health.HealthPingCheck
 
 @Component("hmppsAuth")
 class HmppsAuthHealthPing(@Qualifier("hmppsAuthHealthWebClient") webClient: WebClient) : HealthPingCheck(webClient)
+
+// Example ping health check calling out to other services
+@Component("templateKotlinApi")
+class TemplateKotlinApiHealthPing(@Qualifier("templateKotlinApiHealthWebClient") webClient: WebClient) : HealthPingCheck(webClient)
