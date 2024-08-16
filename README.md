@@ -47,3 +47,11 @@ It then performs a search and replace and directory renames so the project is re
 
 To allow easy identification of an application, the product Id of the overall product should be set in `values.yaml`. 
 The Service Catalogue contains a list of these IDs and is currently in development here https://developer-portal.hmpps.service.justice.gov.uk/products
+
+## Example Resources
+
+There is an `ExampleResource` that includes best practice and also serves as a spring security example.  The template
+typescript project has a demonstration that calls this endpoint as well.
+
+For the demonstration, rather than introducing a dependency on a different service, this application calls out to
+itself.  This is only to show a service calling out to another service and is certainly not recommended!
