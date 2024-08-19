@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.wiremo
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -17,6 +18,17 @@ class TemplateKotlinApiMockServer : WireMockServer(8091) {
           .withBody("""{"status":"${if (status == 200) "UP" else "DOWN"}"}""")
           .withStatus(status),
       ),
+    )
+  }
+
+  fun stubGetSecondExampleUserDetails() {
+    stubFor(
+      get(urlPathMatching("/example-2/[a-zA-Z]*"))
+        .willReturn(
+          aResponse()
+            .withHeader("Content-Type", "application/json")
+            .withBody("""{ "message": "A stubbed message" }"""),
+        ),
     )
   }
 }
