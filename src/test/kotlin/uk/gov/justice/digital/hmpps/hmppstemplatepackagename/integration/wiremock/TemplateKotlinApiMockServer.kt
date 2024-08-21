@@ -21,13 +21,25 @@ class TemplateKotlinApiMockServer : WireMockServer(8091) {
     )
   }
 
-  fun stubGetSecondExampleUserDetails() {
+  fun stubExampleExternalApiUserMessage() {
     stubFor(
-      get(urlPathMatching("/example-2/[a-zA-Z]*"))
+      get(urlPathMatching("/example-external-api/[a-zA-Z]*"))
         .willReturn(
           aResponse()
             .withHeader("Content-Type", "application/json")
             .withBody("""{ "message": "A stubbed message" }"""),
+        ),
+    )
+  }
+
+  fun stubExampleExternalApiNotFound() {
+    stubFor(
+      get(urlPathMatching("/example-external-api/[a-zA-Z]*"))
+        .willReturn(
+          aResponse()
+            .withStatus(404)
+            .withHeader("Content-Type", "application/json")
+            .withBody("""{ "userMessage": "A stubbed message" }"""),
         ),
     )
   }

@@ -4,24 +4,23 @@ import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
-import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 
 @Service
 class TemplateKotlinApiService(
   private val templateKotlinApiWebClient: WebClient,
-  private val hmppsAuthenticationHolder: HmppsAuthenticationHolder,
 ) {
-  fun getUserMessage(): UserMessageDto =
+  fun getUserMessage(user: String): UserMessageDto? =
     templateKotlinApiWebClient.get()
-      // Note that we don't use string interpolation ("/$authSource").
+      // Note that we don't use string interpolation ("/${user}").
       // This is important - using string interpolation causes each uri to be added as a separate path in app
-      // insights and you'll run out of memory in your app
-      .uri("/example-2/{authSource}", hmppsAuthenticationHolder.authSource)
+      // insights and you'll run out of memory in your app.
+      .uri("/example-external-api/{user}", user)
       .retrieve()
       .bodyToMono(UserMessageDto::class.java)
+      // if the endpoint returns a not found response (404) then treat as empty rather than throwing a server error
+      // other options would be to re-throw the not found and use the controller advice to return a 404
       .onErrorResume(WebClientResponseException.NotFound::class.java) { Mono.empty() }
-      // our endpoint always returns a response body, so okay to enforce that
-      .block()!!
+      .block()
 }
 
 data class UserMessageDto(

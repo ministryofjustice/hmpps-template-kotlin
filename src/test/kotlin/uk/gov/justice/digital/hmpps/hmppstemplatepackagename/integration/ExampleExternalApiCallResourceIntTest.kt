@@ -4,16 +4,16 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class ExampleSecondResourceIntTest : IntegrationTestBase() {
+class ExampleExternalApiCallResourceIntTest : IntegrationTestBase() {
 
   @Nested
-  @DisplayName("GET /example-2/{authSource}}")
-  inner class SecondExampleEndpoint {
+  @DisplayName("GET /example-external-api/{user}")
+  inner class ExampleExternalApiEndpoint {
 
     @Test
     fun `should return unauthorized if no token`() {
       webTestClient.get()
-        .uri("/example-2/NONE")
+        .uri("/example-external-api/NONE")
         .exchange()
         .expectStatus()
         .isUnauthorized
@@ -22,7 +22,7 @@ class ExampleSecondResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return forbidden if no role`() {
       webTestClient.get()
-        .uri("/example-2/NONE")
+        .uri("/example-external-api/NONE")
         .headers(setAuthorisation())
         .exchange()
         .expectStatus()
@@ -32,7 +32,7 @@ class ExampleSecondResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return forbidden if wrong role`() {
       webTestClient.get()
-        .uri("/example-2/NONE")
+        .uri("/example-external-api/NONE")
         .headers(setAuthorisation(roles = listOf("ROLE_WRONG")))
         .exchange()
         .expectStatus()
@@ -42,13 +42,26 @@ class ExampleSecondResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return OK`() {
       webTestClient.get()
-        .uri("/example-2/DELIUS")
+        .uri("/example-external-api/odd")
         .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__RO")))
         .exchange()
         .expectStatus()
         .isOk
         .expectBody()
-        .jsonPath("$.message").isEqualTo("Found a Delius user")
+        .jsonPath("$.message").isEqualTo("Found an odd user")
+    }
+
+    @Test
+    fun `should return NOT_FOUND if user not found`() {
+      webTestClient.get()
+        // code will throw exception if the user is 13 characters long
+        .uri("/example-external-api/thirteenchars")
+        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__RO")))
+        .exchange()
+        .expectStatus()
+        .isNotFound
+        .expectBody()
+        .jsonPath("$.userMessage").isEqualTo("Not found error: User not found")
     }
   }
 }
