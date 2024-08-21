@@ -60,13 +60,13 @@ class ExampleResourceIntTest : IntegrationTestBase() {
   }
 
   @Nested
-  @DisplayName("GET /example/user-message")
+  @DisplayName("GET /example/user-message/{user}")
   inner class UserDetailsEndpoint {
 
     @Test
     fun `should return unauthorized if no token`() {
       webTestClient.get()
-        .uri("/example/user-message")
+        .uri("/example/user-message/{user}", "bob")
         .exchange()
         .expectStatus()
         .isUnauthorized
@@ -75,7 +75,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return forbidden if no role`() {
       webTestClient.get()
-        .uri("/example/user-message")
+        .uri("/example/user-message/{user}", "bob")
         .headers(setAuthorisation(roles = listOf()))
         .exchange()
         .expectStatus()
@@ -85,7 +85,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return forbidden if wrong role`() {
       webTestClient.get()
-        .uri("/example/user-message")
+        .uri("/example/user-message/{user}", "bob")
         .headers(setAuthorisation(roles = listOf("ROLE_WRONG")))
         .exchange()
         .expectStatus()
@@ -95,17 +95,35 @@ class ExampleResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return OK`() {
       hmppsAuth.stubGrantToken()
-      templateKotlinApi.stubGetSecondExampleUserDetails()
+      templateKotlinApi.stubExampleExternalApiUserMessage()
       webTestClient.get()
-        .uri("/example/user-message")
-        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .uri("/example/user-message/{user}", "bob")
+        .headers(setAuthorisation(username = "AUTH_OK", roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
         .exchange()
         .expectStatus()
         .isOk
         .expectBody()
         .jsonPath("$.message").isEqualTo("A stubbed message")
 
-      templateKotlinApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-2/NONE")))
+      templateKotlinApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-external-api/bob")))
+      hmppsAuth.verify(1, WireMock.postRequestedFor(WireMock.urlEqualTo("/auth/oauth/token")))
+    }
+
+    @Test
+    fun `should return empty response if user not found`() {
+      hmppsAuth.stubGrantToken()
+      templateKotlinApi.stubExampleExternalApiNotFound()
+      webTestClient.get()
+        .uri("/example/user-message/{user}", "bob")
+        .headers(setAuthorisation(username = "AUTH_NOTFOUND", roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .exchange()
+        .expectStatus()
+        .isOk
+        .expectBody()
+        .jsonPath("$.message").doesNotExist()
+
+      templateKotlinApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-external-api/bob")))
+      hmppsAuth.verify(1, WireMock.postRequestedFor(WireMock.urlEqualTo("/auth/oauth/token")))
     }
   }
 }
