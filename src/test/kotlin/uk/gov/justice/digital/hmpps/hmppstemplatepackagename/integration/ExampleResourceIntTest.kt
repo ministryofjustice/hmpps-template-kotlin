@@ -60,13 +60,13 @@ class ExampleResourceIntTest : IntegrationTestBase() {
   }
 
   @Nested
-  @DisplayName("GET /example/user-message/{user}")
+  @DisplayName("GET /example/message/{parameter}")
   inner class UserDetailsEndpoint {
 
     @Test
     fun `should return unauthorized if no token`() {
       webTestClient.get()
-        .uri("/example/user-message/{user}", "bob")
+        .uri("/example/message/{parameter}", "bob")
         .exchange()
         .expectStatus()
         .isUnauthorized
@@ -75,7 +75,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return forbidden if no role`() {
       webTestClient.get()
-        .uri("/example/user-message/{user}", "bob")
+        .uri("/example/message/{parameter}", "bob")
         .headers(setAuthorisation(roles = listOf()))
         .exchange()
         .expectStatus()
@@ -85,7 +85,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return forbidden if wrong role`() {
       webTestClient.get()
-        .uri("/example/user-message/{user}", "bob")
+        .uri("/example/message/{parameter}", "bob")
         .headers(setAuthorisation(roles = listOf("ROLE_WRONG")))
         .exchange()
         .expectStatus()
@@ -97,7 +97,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       templateKotlinApi.stubExampleExternalApiUserMessage()
       webTestClient.get()
-        .uri("/example/user-message/{user}", "bob")
+        .uri("/example/message/{parameter}", "bob")
         .headers(setAuthorisation(username = "AUTH_OK", roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
         .exchange()
         .expectStatus()
@@ -114,7 +114,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       templateKotlinApi.stubExampleExternalApiNotFound()
       webTestClient.get()
-        .uri("/example/user-message/{user}", "bob")
+        .uri("/example/message/{parameter}", "bob")
         .headers(setAuthorisation(username = "AUTH_NOTFOUND", roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
         .exchange()
         .expectStatus()
