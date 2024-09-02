@@ -13,6 +13,7 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
+  # TODO: This security section can be removed if your service doesn't call out to other services
   security:
     oauth2:
       resourceserver:
@@ -26,10 +27,11 @@ spring:
 
         registration:
           # example client registration for calling out to other services
-          template-kotlin-api:
+          # TODO: Remove / replace this registration
+          example-api:
             provider: hmpps-auth
-            client-id: ${template-kotlin-api.client.id}
-            client-secret: ${template-kotlin-api.client.secret}
+            client-id: ${example-api.client.id}
+            client-secret: ${example-api.client.secret}
             authorization-grant-type: client_credentials
             scope: read
 

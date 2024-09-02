@@ -9,7 +9,8 @@ import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
-class TemplateKotlinApiMockServer : WireMockServer(8091) {
+// TODO: Remove / replace this mock server as it currently calls the Example API (itself)
+class ExampleApiMockServer : WireMockServer(8091) {
   fun stubHealthPing(status: Int) {
     stubFor(
       get("/health/ping").willReturn(
@@ -45,13 +46,13 @@ class TemplateKotlinApiMockServer : WireMockServer(8091) {
   }
 }
 
-class TemplateKotlinApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class ExampleApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
   companion object {
     @JvmField
-    val templateKotlinApi = TemplateKotlinApiMockServer()
+    val exampleApi = ExampleApiMockServer()
   }
 
-  override fun beforeAll(context: ExtensionContext): Unit = templateKotlinApi.start()
-  override fun beforeEach(context: ExtensionContext): Unit = templateKotlinApi.resetAll()
-  override fun afterAll(context: ExtensionContext): Unit = templateKotlinApi.stop()
+  override fun beforeAll(context: ExtensionContext): Unit = exampleApi.start()
+  override fun beforeEach(context: ExtensionContext): Unit = exampleApi.resetAll()
+  override fun afterAll(context: ExtensionContext): Unit = exampleApi.stop()
 }

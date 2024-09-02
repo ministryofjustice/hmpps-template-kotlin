@@ -9,6 +9,7 @@ import uk.gov.justice.digital.hmpps.hmppstemplatepackagename.service.ExampleApiS
 import java.time.LocalDateTime
 
 // This controller is expected to be called from the UI - so the hmpps-template-typescript project.
+// TODO: This is an example and should renamed / replaced
 @RestController
 // Role here is specific to the UI.
 @PreAuthorize("hasRole('ROLE_TEMPLATE_KOTLIN__UI')")
