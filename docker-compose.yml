@@ -3,15 +3,33 @@ services:
   hmpps-template-kotlin:
     build:
       context: .
-    network_mode: "host"
+    networks:
+      - hmpps
     container_name: hmpps-template-kotlin
     ports:
-      - "8081:8080"
+      - "8080:8080"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
     environment:
       - SERVER_PORT=8080
+      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
+      # TODO: Remove this URL and replace with outgoing service URLs
+      - EXAMPLE_URL=http://hmpps-template-kotlin:8080
       - SPRING_PROFILES_ACTIVE=dev
+
+  hmpps-auth:
+    image: quay.io/hmpps/hmpps-auth:latest
+    networks:
+      - hmpps
+    container_name: hmpps-auth
+    ports:
+      - "8090:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
 networks:
   hmpps:
