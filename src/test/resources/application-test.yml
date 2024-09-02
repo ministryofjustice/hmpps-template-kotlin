@@ -5,11 +5,13 @@ management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
 
-hmpps-auth.url: "http://localhost:8090/auth"
+hmpps-auth:
+  url: "http://localhost:8090/auth"
 
 # example client configuration for calling out to other services
-template-kotlin-api:
+# TODO: Remove / replace this configuration
+example-api:
   url: "http://localhost:8091"
   client:
-    id: "template-kotlin-api-client"
-    secret: "template-kotlin-api-client-secret"
+    id: "example-api-client"
+    secret: "example-api-client-secret"

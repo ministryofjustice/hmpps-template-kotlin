@@ -5,8 +5,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.wiremock.ExampleApiExtension.Companion.exampleApi
 import uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
-import uk.gov.justice.digital.hmpps.hmppstemplatepackagename.integration.wiremock.TemplateKotlinApiExtension.Companion.templateKotlinApi
 import java.time.LocalDate
 
 class ExampleResourceIntTest : IntegrationTestBase() {
@@ -95,7 +95,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
     @Test
     fun `should return OK`() {
       hmppsAuth.stubGrantToken()
-      templateKotlinApi.stubExampleExternalApiUserMessage()
+      exampleApi.stubExampleExternalApiUserMessage()
       webTestClient.get()
         .uri("/example/message/{parameter}", "bob")
         .headers(setAuthorisation(username = "AUTH_OK", roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
@@ -105,14 +105,14 @@ class ExampleResourceIntTest : IntegrationTestBase() {
         .expectBody()
         .jsonPath("$.message").isEqualTo("A stubbed message")
 
-      templateKotlinApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-external-api/bob")))
+      exampleApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-external-api/bob")))
       hmppsAuth.verify(1, WireMock.postRequestedFor(WireMock.urlEqualTo("/auth/oauth/token")))
     }
 
     @Test
     fun `should return empty response if user not found`() {
       hmppsAuth.stubGrantToken()
-      templateKotlinApi.stubExampleExternalApiNotFound()
+      exampleApi.stubExampleExternalApiNotFound()
       webTestClient.get()
         .uri("/example/message/{parameter}", "bob")
         .headers(setAuthorisation(username = "AUTH_NOTFOUND", roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
@@ -122,7 +122,7 @@ class ExampleResourceIntTest : IntegrationTestBase() {
         .expectBody()
         .jsonPath("$.message").doesNotExist()
 
-      templateKotlinApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-external-api/bob")))
+      exampleApi.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/example-external-api/bob")))
       hmppsAuth.verify(1, WireMock.postRequestedFor(WireMock.urlEqualTo("/auth/oauth/token")))
     }
   }
