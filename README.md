@@ -50,8 +50,32 @@ The Service Catalogue contains a list of these IDs and is currently in developme
 
 ## Example Resources
 
-There is an `ExampleResource` and `ExampleSecondResource` that includes best practice and also serve as spring security examples.  The template
+There is an `ExampleResource` that includes best practice and also serve as spring security examples.  The template
 typescript project has a demonstration that calls this endpoint as well.
 
 For the demonstration, rather than introducing a dependency on a different service, this application calls out to
 itself.  This is only to show a service calling out to another service and is certainly not recommended!
+
+## Running the application locally
+
+The application comes with a `dev` spring profile that includes default settings for running locally.  This is not 
+necessary when deploying to kubernetes as these values are included in the helm configuration templates - 
+e.g. `values-dev.yaml`.
+
+There is also a `docker-compose.yml` that can be used to run a local instance of the template in docker and also an
+instance of HMPPS Auth (required if your service calls out to other services using a token).
+
+```bash
+docker compose pull && docker compose up
+```
+will build the application and run it and HMPPS Auth within a local docker instance.
+
+### Running the application in Intellij
+
+```bash
+docker compose pull && docker compose up --scale hmpps-template-kotlin=0 
+```
+
+will just start a docker instance of HMPPS Auth.  The application should then be started with a `dev` active profile
+in Intellij.
+
