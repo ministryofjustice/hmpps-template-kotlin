@@ -46,6 +46,7 @@ EXCLUDES="( -path ./build -o -path ./out -o -path ./.git -o -path ./.gradle -o -
 # shellcheck disable=SC2086
 find . $EXCLUDES -prune -o -type f -exec sed -i.bak \
   -e "s/hmpps-template-kotlin/$PROJECT_NAME/g" \
+  -e "s/template-kotlin/$PROJECT_NAME/g" \
   -e "s/HMPPS Template Kotlin/$PROJECT_DESCRIPTION/g" \
   -e "s/HmppsTemplateKotlin/$CLASS_NAME/g" \
   -e "s/hmppstemplatepackagename/$PACKAGE_NAME/g" {} \; -exec rm '{}.bak' \;
@@ -93,4 +94,5 @@ sed -i -z -E \
 rm rename-project.bash
 
 echo "Completed."
-echo "Please now review changes and generate a banner for src/main/resources/banner.txt"
+echo "Please now review changes and generate a banner for src/main/resources/banner.txt."
+echo "There are TODOs in the codebase to guide you through the changes."
