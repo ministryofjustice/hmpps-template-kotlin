@@ -62,6 +62,18 @@ class OpenApiDocsTest : IntegrationTestBase() {
     assertThat(result.openAPI.paths).isNotEmpty
   }
 
+  @Test
+  fun `the open api json path security requirements are valid`() {
+    val result = OpenAPIV3Parser().readLocation("http://localhost:$port/v3/api-docs", null, null)
+
+    // The security requirements of each path don't appear to be validated like they are at https://editor.swagger.io/
+    // We therefore need to grab all the valid security requirements and check that each path only contains those items
+    val securityRequirements = result.openAPI.security.flatMap { it.keys }
+    result.openAPI.paths.forEach { pathItem ->
+      assertThat(pathItem.value.get.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
+    }
+  }
+
   @ParameterizedTest
   @CsvSource(value = ["template-kotlin-ui-role, ROLE_TEMPLATE_KOTLIN__UI"])
   fun `the security scheme is setup for bearer tokens`(key: String, role: String) {
