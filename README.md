@@ -14,7 +14,7 @@ see [dps-project-bootstrap](https://github.com/ministryofjustice/dps-project-boo
 template application using the `github_template_repo` attribute to clone without the need to manually do this yourself
 within GitHub.
 
-This bootstrap is community managed by the mojdt `#kotlin-dev` slack channel.
+This project is community managed by the mojdt `#kotlin-dev` slack channel.
 Please raise any questions or queries there. Contributions welcome!
 
 Our security policy is located [here](https://github.com/ministryofjustice/hmpps-template-kotlin/security/policy).
@@ -123,7 +123,7 @@ will build the application and run it and HMPPS Auth within a local docker insta
 ### Running the application in Intellij
 
 ```bash
-docker compose pull && docker compose up --scale hmpps-template-kotlin=0 
+docker compose pull && docker compose up --scale hmpps-template-kotlin=0
 ```
 
 will just start a docker instance of HMPPS Auth. The application should then be started with a `dev` active profile
