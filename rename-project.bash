@@ -18,21 +18,25 @@ if [[ $# -ge 1 ]]; then
 else
   read -rp "New project name e.g. prison-visits >" PROJECT_INPUT
   read -rp "Slack channel for release notifications >" SLACK_RELEASES_CHANNEL
-  read -rp "Slack channel for pipeline security notifications. >" PIPELINE_SECURITY_SLACK_CHANNEL
-  read -rp "Non-prod k8s alerts. The severity label used by prometheus to route alert notifications to slack. See cloud-platform user guide. >" NON_PROD_ALERTS_SEVERITY_LABEL
-  read -rp "Production k8s alerts. The severity label used by prometheus to route alert notifications to slack. See cloud-platform user guide. >" PROD_ALERTS_SEVERITY_LABEL
-  read -rp "Product ID: provide an ID for the product this app/component belongs too.  Refer to the developer portal. >" PRODUCT_ID
+  read -rp "Slack channel for pipeline security notifications >" PIPELINE_SECURITY_SLACK_CHANNEL
+  echo "For configurating alert severity labels, please first see https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts"
+  read -rp "Non-prod kubernetes alerts. The severity label used by prometheus to route alert notifications to slack >" NON_PROD_ALERTS_SEVERITY_LABEL
+  read -rp "Production kubernetes alerts. The severity label used by prometheus to route alert notifications to slack >" PROD_ALERTS_SEVERITY_LABEL
+  echo "Refer to the developer portal at https://developer-portal.hmpps.service.justice.gov.uk/products to find your product id."
+  read -rp "Provide an ID for the product this app/component belongs too >" PRODUCT_ID
 fi
 
 PROJECT_NAME_LOWER=${PROJECT_INPUT,,}                 # lowercase
 PROJECT_NAME_HYPHENS=${PROJECT_NAME_LOWER// /-}       # spaces to hyphens
 
 PROJECT_NAME=${PROJECT_NAME_HYPHENS//[^a-z0-9-]/}     # remove all other characters
-PACKAGE_NAME=${PROJECT_NAME//-/}                      # remove hyphen
+PROJECT_NAME_WITHOUT_HMPPS=${PROJECT_NAME/hmpps-/}    # remove hmpps prefix
+PACKAGE_NAME=${PROJECT_NAME_WITHOUT_HMPPS//-/}        # remove hyphen
 
 read -ra PROJECT_NAME_ARRAY <<<"${PROJECT_NAME//-/ }" # convert to array
-PROJECT_DESCRIPTION=${PROJECT_NAME_ARRAY[*]^}         # convert array back to string thus capitalising first character
-CLASS_NAME=${PROJECT_DESCRIPTION// /}                 # then remove spaces
+PROJECT_DESCRIPTION_HMPPS_LOWER=${PROJECT_NAME_ARRAY[*]^} # convert array back to string thus capitalising first character
+PROJECT_DESCRIPTION=${PROJECT_DESCRIPTION_HMPPS_LOWER/Hmpps/HMPPS} # ensure that HMPPS is capitalised
+CLASS_NAME=${PROJECT_DESCRIPTION_HMPPS_LOWER// /}     # then remove spaces
 
 echo "Found:      Project of $PROJECT_DESCRIPTION"
 echo "       Project name of $PROJECT_NAME"
@@ -44,19 +48,19 @@ echo "Performing search and replace"
 # exclude files that get in the way and don't make any difference
 EXCLUDES="( -path ./build -o -path ./out -o -path ./.git -o -path ./.gradle -o -path ./gradle -o -path ./.idea -o -path ./rename-project.bash )"
 # shellcheck disable=SC2086
-find . $EXCLUDES -prune -o -type f -exec sed -i.bak \
+find . $EXCLUDES -prune -o -type f -exec sed -i \
   -e "s/hmpps-template-kotlin/$PROJECT_NAME/g" \
-  -e "s/template-kotlin/$PROJECT_NAME/g" \
+  -e "s/template-kotlin/$PROJECT_NAME_WITHOUT_HMPPS/g" \
   -e "s/HMPPS Template Kotlin/$PROJECT_DESCRIPTION/g" \
   -e "s/HmppsTemplateKotlin/$CLASS_NAME/g" \
-  -e "s/hmppstemplatepackagename/$PACKAGE_NAME/g" {} \; -exec rm '{}.bak' \;
+  -e "s/templatepackagename/$PACKAGE_NAME/g" {} \;
 
 echo "Performing directory renames"
 
 # move package directory to new name
 BASE="kotlin/uk/gov/justice/digital/hmpps"
-mv "src/test/${BASE}/hmppstemplatepackagename" "src/test/$BASE/$PACKAGE_NAME"
-mv "src/main/${BASE}/hmppstemplatepackagename" "src/main/$BASE/$PACKAGE_NAME"
+mv "src/test/${BASE}/templatepackagename" "src/test/$BASE/$PACKAGE_NAME"
+mv "src/main/${BASE}/templatepackagename" "src/main/$BASE/$PACKAGE_NAME"
 
 # and move helm stuff to new name
 mv "helm_deploy/hmpps-template-kotlin" "helm_deploy/$PROJECT_NAME"
@@ -88,7 +92,6 @@ sed -i -z -E \
   -e "s/SLACK_RELEASES_CHANNEL/$SLACK_RELEASES_CHANNEL/" \
   -e "s/PIPELINE_SECURITY_SLACK_CHANNEL/$PIPELINE_SECURITY_SLACK_CHANNEL/" \
   .circleci/config.yml
-
 
 # lastly remove ourselves
 rm rename-project.bash
