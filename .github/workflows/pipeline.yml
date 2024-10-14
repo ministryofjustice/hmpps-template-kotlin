@@ -54,6 +54,12 @@ permissions:
   packages: write
 
 jobs:
+  helm_lint:
+    name: helm lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@main
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment || 'dev' }}
   kotlin_validate:
     name: Validate the kotlin
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@main
@@ -61,10 +67,35 @@ jobs:
   build:
     name: Build docker image from hmpps-github-actions
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@main
-    needs: [kotlin_validate]
+    needs: 
+      - kotlin_validate
     with:
       docker_registry: ${{ inputs.docker_registry || 'ghcr.io' }}
       registry_org: ${{ inputs.registry_org || 'ministryofjustice' }}
       additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || true }}
-      docker_multiplatform: ${{ inputs.docker_multiplatform || false }}
+      docker_multiplatform: ${{ inputs.docker_multiplatform || true }}
+  create_app_version:
+    name: Create app version
+    needs: 
+      - build
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/create_app_version.yml@main    
+  dev-approval-gate:
+    needs: [kotlin_validate,build,helm_lint]
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: approve
+        env: 
+          ENV_NAME: ${{ inputs.environment || 'dev'  }}
+        run: echo "Approve for ${ENV_NAME}"
+  deploy_dev:
+    name: Deploy 
+    needs: 
+      - create_app_version
+      - build
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@main
+    secrets: inherit
+    with:
+      environment: 'dev'
+      app_version: '${{ needs.create_app_version.outputs.version }}'
