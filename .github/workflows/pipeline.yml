@@ -64,22 +64,24 @@ jobs:
     name: Validate the kotlin
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@main
     secrets: inherit
+  create_app_version:
+    name: Create app version
+    needs: 
+      - kotlin_validate
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/create_app_version.yml@main    
   build:
     name: Build docker image from hmpps-github-actions
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@main
-    needs: 
-      - kotlin_validate
+    needs:
+      - create_app_version
     with:
       docker_registry: ${{ inputs.docker_registry || 'ghcr.io' }}
       registry_org: ${{ inputs.registry_org || 'ministryofjustice' }}
       additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || true }}
       docker_multiplatform: ${{ inputs.docker_multiplatform || true }}
-  create_app_version:
-    name: Create app version
-    needs: 
-      - build
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/create_app_version.yml@main    
+      app_version: ${{ needs.create_app_version.outputs.version }}
+
   dev-approval-gate:
     needs: [kotlin_validate,build,helm_lint]
     environment: dev
