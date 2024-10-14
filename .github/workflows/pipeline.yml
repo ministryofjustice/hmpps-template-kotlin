@@ -55,11 +55,7 @@ permissions:
 jobs:
   helm_lint:
     name: helm lint
-<<<<<<< HEAD
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW_VERSION
-=======
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@main
->>>>>>> 415f7b6 (end to end flow for build and deploy - first attempt)
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW VERSION
     secrets: inherit
     with:
       environment: ${{ inputs.environment || 'dev' }}
