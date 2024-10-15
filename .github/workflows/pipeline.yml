@@ -1,4 +1,4 @@
-name: Pipeline
+name: Pipeline [Test - Build - Deploy]
 
 on:
   push:
@@ -83,7 +83,6 @@ jobs:
       app_version: ${{ needs.create_app_version.outputs.version }}
   dev-approval-gate:
     needs: 
-      - kotlin_validate
       - build
       - helm_lint
     environment: dev
