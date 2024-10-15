@@ -81,9 +81,11 @@ jobs:
       push: ${{ inputs.push || true }}
       docker_multiplatform: ${{ inputs.docker_multiplatform || true }}
       app_version: ${{ needs.create_app_version.outputs.version }}
-
   dev-approval-gate:
-    needs: [kotlin_validate,build,helm_lint]
+    needs: 
+      - kotlin_validate
+      - build
+      - helm_lint
     environment: dev
     runs-on: ubuntu-latest
     steps:
@@ -95,7 +97,7 @@ jobs:
     name: Deploy 
     needs: 
       - create_app_version
-      - build
+      - dev-approval-gate
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@main
     secrets: inherit
     with:
