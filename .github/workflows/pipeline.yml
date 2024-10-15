@@ -81,22 +81,12 @@ jobs:
       push: ${{ inputs.push || true }}
       docker_multiplatform: ${{ inputs.docker_multiplatform || true }}
       app_version: ${{ needs.create_app_version.outputs.version }}
-  dev-approval-gate:
-    needs: 
-      - build
-      - helm_lint
-    environment: dev
-    runs-on: ubuntu-latest
-    steps:
-      - name: approve
-        env: 
-          ENV_NAME: ${{ inputs.environment || 'dev'  }}
-        run: echo "Approve for ${ENV_NAME}"
   deploy_dev:
-    name: Deploy 
+    name: Deploy to dev environment
     needs: 
       - create_app_version
-      - dev-approval-gate
+      - build
+      - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@main
     secrets: inherit
     with:
