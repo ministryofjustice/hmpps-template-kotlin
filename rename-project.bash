@@ -87,12 +87,12 @@ RANDOM_HOUR=$((RANDOM % (9 - 3 + 1) + 3))
 RANDOM_MINUTE=$(($RANDOM%60))
 RANDOM_MINUTE2=$(($RANDOM%60))
 sed -i -z -E \
-  -e "s/security:\n    triggers:\n      - schedule:\n          cron: \"15 7/security:\n    triggers:\n      - schedule:\n          cron: \"$RANDOM_MINUTE $RANDOM_HOUR/" \
-  -e "s/security-weekly:\n    triggers:\n      - schedule:\n          cron: \"0 5/security-weekly:\n    triggers:\n      - schedule:\n          cron: \"$RANDOM_MINUTE2 $RANDOM_HOUR/" \
   -e "s/SLACK_RELEASES_CHANNEL/$SLACK_RELEASES_CHANNEL/" \
   .circleci/config.yml
 
 sed -i -z -E \
+  -e "s/on:\n  workflow_dispatch:\n  schedule:\n    - cron: \"19 6/on:\n  workflow_dispatch:\n  schedule:\n    - cron: \"$RANDOM_MINUTE $RANDOM_HOUR/" \
+  -e "s/on:\n  workflow_dispatch:\n  schedule:\n    - cron: \"34 6/on:\n  workflow_dispatch:\n  schedule:\n    - cron: \"$RANDOM_MINUTE2 $RANDOM_HOUR/" \
   -e "s/SECURITY_ALERTS_SLACK_CHANNEL_ID/$SECURITY_ALERTS_SLACK_CHANNEL_ID/" \
   .github/workflows/*
 
