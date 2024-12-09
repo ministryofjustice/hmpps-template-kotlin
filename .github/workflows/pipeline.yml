@@ -56,18 +56,18 @@ permissions:
 jobs:
   helm_lint:
     name: helm lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2 # WORKFLOW VERSION
     secrets: inherit
     with:
       environment: ${{ inputs.environment || 'dev' }}
   kotlin_validate:
     name: Validate the kotlin
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@v1 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v1 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
       - kotlin_validate
     with:
@@ -81,7 +81,7 @@ jobs:
     needs: 
       - build
       - helm_lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v1 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
       environment: 'dev'
