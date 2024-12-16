@@ -4,49 +4,17 @@ on:
   push:
     branches:
       - '**'
-
   workflow_dispatch:
     inputs:
-      environment:
-        description: Environment
-        type: choice
-        required: true
-        options:
-          - dev
-          - preprod
-          - staging
-          - production
-        default: 'dev'
-      docker_registry:
-        description: Docker registry
-        required: true
-        default: 'ghcr.io'
-        type: choice
-        options:
-          - 'ghcr.io'
-          - 'quay.io'
-      registry_org:
-        description: Docker registry organisation
-        required: true
-        default: 'ministryofjustice'
-        type: choice
-        options:
-          - 'ministryofjustice'
-          - 'hmpps'
       additional_docker_tag:
-        description: Additional docker tag that can be used to specify stable tags
+        description: Additional docker tag that can be used to specify stable or testing tags
         required: false
         default: ''
         type: string
       push:
         description: Push docker image to registry flag
         required: true
-        default: true
-        type: boolean
-      docker_multiplatform:
-        description: docker multiplatform build or not
-        required: true
-        default: true
+        default: false
         type: boolean
 
 permissions:
@@ -55,11 +23,14 @@ permissions:
 
 jobs:
   helm_lint:
+    strategy:
+      matrix:
+        environments: ['dev', 'preprod', 'prod']
     name: helm lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW VERSION
     secrets: inherit
     with:
-      environment: ${{ inputs.environment || 'dev' }}
+      environment: ${{ matrix.environments }}
   kotlin_validate:
     name: Validate the kotlin
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/kotlin_validate.yml@v2 # WORKFLOW_VERSION
@@ -71,14 +42,14 @@ jobs:
     needs:
       - kotlin_validate
     with:
-      docker_registry: ${{ inputs.docker_registry || 'ghcr.io' }}
-      registry_org: ${{ inputs.registry_org || 'ministryofjustice' }}
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
       additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || true }}
-      docker_multiplatform: ${{ inputs.docker_multiplatform || true }}
+      docker_multiplatform: true
   deploy_dev:
-    name: Deploy to dev environment
-    needs: 
+    name: Deploy to the development environment
+    needs:
       - build
       - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
@@ -86,10 +57,9 @@ jobs:
     with:
       environment: 'dev'
       app_version: '${{ needs.build.outputs.app_version }}'
-
   # deploy_preprod:
   #   name: Deploy to pre-production environment
-  #   needs: 
+  #   needs:
   #     - build
   #     - deploy_dev
   #   uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
@@ -99,7 +69,7 @@ jobs:
   #     app_version: '${{ needs.build.outputs.app_version }}'
   # deploy_prod:
   #   name: Deploy to production environment
-  #   needs: 
+  #   needs:
   #     - build
   #     - deploy_preprod
   #   uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
