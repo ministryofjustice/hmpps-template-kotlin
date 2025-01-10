@@ -13,13 +13,13 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
-  # TODO: This security section can be removed if your service doesn't call out to other services
   security:
     oauth2:
       resourceserver:
         jwt:
           jwk-set-uri: ${hmpps-auth.url}/.well-known/jwks.json
 
+      # TODO: This client section can be removed if your service doesn't call out to other services
       client:
         provider:
           hmpps-auth:
