@@ -26,11 +26,11 @@ generic-service:
   #     [name of environment variable as seen by app]: [key of kubernetes secret to load]
 
   namespace_secrets:
-    hmpps-template-kotlin:
+    hmpps-template-kotlin-client-creds:
       # Example client registration secrets
-      EXAMPLE_API_CLIENT_ID: "TEMPLATE_KOTLIN_API_CLIENT_ID"
-      EXAMPLE_API_CLIENT_SECRET: "TEMPLATE_KOTLIN_API_CLIENT_SECRET"
-    application-insights:
+      EXAMPLE_API_CLIENT_ID: "API_CLIENT_ID"
+      EXAMPLE_API_CLIENT_SECRET: "API_CLIENT_SECRET"
+    hmpps-template-kotlin-application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
 
   allowlist:
