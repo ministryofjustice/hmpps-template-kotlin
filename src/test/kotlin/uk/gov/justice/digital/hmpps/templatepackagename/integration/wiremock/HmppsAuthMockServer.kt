@@ -14,7 +14,10 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class HmppsAuthApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class HmppsAuthApiExtension :
+  BeforeAllCallback,
+  AfterAllCallback,
+  BeforeEachCallback {
   companion object {
     @JvmField
     val hmppsAuth = HmppsAuthMockServer()
