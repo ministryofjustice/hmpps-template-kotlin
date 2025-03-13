@@ -49,10 +49,9 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     .addSecurityItem(SecurityRequirement().addList("template-kotlin-ui-role", listOf("read")))
 }
 
-private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme =
-  type(SecurityScheme.Type.HTTP)
-    .scheme("bearer")
-    .bearerFormat("JWT")
-    .`in`(SecurityScheme.In.HEADER)
-    .name("Authorization")
-    .description("A HMPPS Auth access token with the `$role` role.")
+private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
+  .scheme("bearer")
+  .bearerFormat("JWT")
+  .`in`(SecurityScheme.In.HEADER)
+  .name("Authorization")
+  .description("A HMPPS Auth access token with the `$role` role.")

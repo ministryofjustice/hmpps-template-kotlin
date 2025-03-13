@@ -46,7 +46,10 @@ class ExampleApiMockServer : WireMockServer(8091) {
   }
 }
 
-class ExampleApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class ExampleApiExtension :
+  BeforeAllCallback,
+  AfterAllCallback,
+  BeforeEachCallback {
   companion object {
     @JvmField
     val exampleApi = ExampleApiMockServer()

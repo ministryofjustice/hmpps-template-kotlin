@@ -15,20 +15,19 @@ class ExampleApiService(
 ) {
   fun getTime(): LocalDateTime = LocalDateTime.now()
 
-  fun exampleGetExternalApiCall(parameter: String): ExampleMessageDto? =
-    exampleApiWebClient.get()
-      // Note that we don't use string interpolation ("/${parameter}").
-      // This is important - using string interpolation causes each uri to be added as a separate path in app
-      // insights and you'll run out of memory in your app.
-      // Also note that this is just an example and the /example-external-api endpoint doesn't exist in this kotlin
-      // template project so will return a not found response each time.
-      .uri("/example-external-api/{parameter}", parameter)
-      .retrieve()
-      .bodyToMono(ExampleMessageDto::class.java)
-      // if the endpoint returns a not found response (404) then treat as empty rather than throwing a server error
-      // other options would be to re-throw the not found and use the controller advice to return a 404
-      .onErrorResume(WebClientResponseException.NotFound::class.java) { Mono.empty() }
-      .block()
+  fun exampleGetExternalApiCall(parameter: String): ExampleMessageDto? = exampleApiWebClient.get()
+    // Note that we don't use string interpolation ("/${parameter}").
+    // This is important - using string interpolation causes each uri to be added as a separate path in app
+    // insights and you'll run out of memory in your app.
+    // Also note that this is just an example and the /example-external-api endpoint doesn't exist in this kotlin
+    // template project so will return a not found response each time.
+    .uri("/example-external-api/{parameter}", parameter)
+    .retrieve()
+    .bodyToMono(ExampleMessageDto::class.java)
+    // if the endpoint returns a not found response (404) then treat as empty rather than throwing a server error
+    // other options would be to re-throw the not found and use the controller advice to return a 404
+    .onErrorResume(WebClientResponseException.NotFound::class.java) { Mono.empty() }
+    .block()
 }
 
 // TODO: This is an example message and should be renamed / replaced
