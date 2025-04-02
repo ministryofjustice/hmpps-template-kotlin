@@ -30,7 +30,7 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
       Info().title("HMPPS Template Kotlin").version(version)
         .contact(Contact().name("HMPPS Digital Studio").email("feedback@digital.justice.gov.uk")),
     )
-    // TODO Add security schema and roles in `.components()` and `.addSecurityItem()`
+  // TODO Add security schema and roles in `.components()` and `.addSecurityItem()`
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
