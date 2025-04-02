@@ -30,7 +30,6 @@ class HealthCheckTest : IntegrationTestBase() {
       .expectBody()
       .jsonPath("status").isEqualTo("DOWN")
       .jsonPath("components.hmppsAuth.status").isEqualTo("DOWN")
-      .jsonPath("components.exampleApi.status").isEqualTo("DOWN")
   }
 
   @Test

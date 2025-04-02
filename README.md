@@ -102,14 +102,15 @@ product id. This is configured in `helm_deploy/<project_name>/values.yaml`.
 Run the `rename-project.bash` without any arguments. This will prompt for the six required parameters and create a PR.
 The script requires a recent version of `bash` to be installed, as well as GNU `sed` in the path.
 
-## TODOs and Examples
+## Common Kotlin patterns
 
-We have tried to provide some examples of best practice in the application - so there are lots of TODOs in the code
-where changes are required to meet your requirements. There is an `ExampleResource` that includes best practice and also
-serve as spring security examples. The template typescript project has a demonstration that calls this endpoint as well.
+Many patterns have evolved for HMPPS Kotlin applications. Using these patterns provides consistency across our suite of 
+Kotlin microservices and allows you to concentrate on building  your business needs rather than reinventing the 
+technical approach.
 
-For the demonstration, rather than introducing a dependency on a different service, this application calls out to
-itself. This is only to show a service calling out to another service and is certainly not recommended!
+Documentation for these patterns can be found in the [HMPPS tech docs](https://tech-docs.hmpps.service.justice.gov.uk/common-kotlin-patterns/). 
+If this documentation is incorrect or needs improving please report to [#ask-prisons-digital-sre](https://moj.enterprise.slack.com/archives/C06MWP0UKDE)
+or [raise a PR](https://github.com/ministryofjustice/hmpps-tech-docs). 
 
 ## Running the application locally
 
