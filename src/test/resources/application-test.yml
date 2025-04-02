@@ -7,11 +7,3 @@ management.endpoint:
 
 hmpps-auth:
   url: "http://localhost:8090/auth"
-
-# example client configuration for calling out to other services
-# TODO: Remove / replace this configuration
-example-api:
-  url: "http://localhost:8091"
-  client:
-    id: "example-api-client"
-    secret: "example-api-client-secret"
