@@ -96,6 +96,7 @@ class OpenApiDocsTest : IntegrationTestBase() {
   }
 
   @Test
+  @Disabled("TODO Enable this test once you have an endpoint.")
   fun `all endpoints have a security scheme defined`() {
     webTestClient.get()
       .uri("/v3/api-docs")
