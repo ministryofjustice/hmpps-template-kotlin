@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 // TODO This controller exists to support the HMPPS Typescript template and should be removed by the bootstrap process
 @RestController
 @PreAuthorize("hasRole('ROLE_TEMPLATE_KOTLIN__UI')")
-@RequestMapping(value = ["/example"], produces = ["application/json"])
+@RequestMapping("/example", produces = ["application/json"])
 class ExampleResource {
 
   @GetMapping("/time")
