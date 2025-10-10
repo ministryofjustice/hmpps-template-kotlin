@@ -9,7 +9,7 @@ Template github repo used for new Kotlin based projects.
 # Instructions
 
 If this is a HMPPS project then the project will be created as part of bootstrapping -
-see [dps-project-bootstrap](https://github.com/ministryofjustice/dps-project-bootstrap). You are able to specify a
+see [hmpps-project-bootstrap](https://github.com/ministryofjustice/hmpps-project-bootstrap). You are able to specify a
 template application using the `github_template_repo` attribute to clone without the need to manually do this yourself
 within GitHub.
 
