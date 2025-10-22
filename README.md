@@ -1,6 +1,6 @@
 # hmpps-template-kotlin
 
-[![repo standards badge](https://img.shields.io/badge/endpoint.svg?&style=flat&logo=github&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-template-kotlin)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-report/hmpps-template-kotlin "Link to report")
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-template-kotlin/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-template-kotlin)
 [![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-template-kotlin)
 [![API docs](https://img.shields.io/badge/API_docs_-view-85EA2D.svg?logo=swagger)](https://template-kotlin-dev.hmpps.service.justice.gov.uk/swagger-ui/index.html)
 
@@ -24,17 +24,17 @@ Documentation to create new service is located [here](https://tech-docs.hmpps.se
 
 When deploying to a new namespace, you may wish to use the
 [templates project namespace](https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev)
-as the basis for your new namespace. This namespace contains both the kotlin and typescript template projects, 
+as the basis for your new namespace. This namespace contains both the kotlin and typescript template projects,
 which is the usual way that projects are setup.
 
 Copy this folder and update all the existing namespace references to correspond to the environment to which you're deploying.
 
-If you only need the kotlin configuration then remove all typescript references and remove the elasticache configuration. 
+If you only need the kotlin configuration then remove all typescript references and remove the elasticache configuration.
 
 To ensure the correct github teams can approve releases, you will need to make changes to the configuration in `resources/service-account-github` where the appropriate team names will need to be added (based on [lines 98-100](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev/resources/serviceaccount-github.tf#L98) and the reference appended to the teams list below [line 112](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev/resources/serviceaccount-github.tf#L112)). Note: hmpps-sre is in this list to assist with deployment issues.
 
 Submit a PR to the Cloud Platform team in
-#ask-cloud-platform. Further instructions from the Cloud Platform team can be found in
+# ask-cloud-platform. Further instructions from the Cloud Platform team can be found in
 the [Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
 
 ## Renaming from HMPPS Template Kotlin - github Actions
@@ -89,12 +89,12 @@ lost within non-production issues.
 ### Production kubernetes alerts
 
 This is the severity label for production, determined by the `custom severity label`. See the above
-#non-production-kubernetes-alerts for more information. This is configured in `helm_deploy/values-prod.yaml`.
+# non-production-kubernetes-alerts for more information. This is configured in `helm_deploy/values-prod.yaml`.
 
 ### Product ID
 
 This is so that we can link a component to a product and thus provide team and product information in the Developer
-Portal. Refer to the developer portal at https://developer-portal.hmpps.service.justice.gov.uk/products to find your
+Portal. Refer to the developer portal at <https://developer-portal.hmpps.service.justice.gov.uk/products> to find your
 product id. This is configured in `helm_deploy/<project_name>/values.yaml`.
 
 ## Manually branding from template app
@@ -104,13 +104,13 @@ The script requires a recent version of `bash` to be installed, as well as GNU `
 
 ## Common Kotlin patterns
 
-Many patterns have evolved for HMPPS Kotlin applications. Using these patterns provides consistency across our suite of 
-Kotlin microservices and allows you to concentrate on building  your business needs rather than reinventing the 
+Many patterns have evolved for HMPPS Kotlin applications. Using these patterns provides consistency across our suite of
+Kotlin microservices and allows you to concentrate on building your business needs rather than reinventing the
 technical approach.
 
-Documentation for these patterns can be found in the [HMPPS tech docs](https://tech-docs.hmpps.service.justice.gov.uk/common-kotlin-patterns/). 
+Documentation for these patterns can be found in the [HMPPS tech docs](https://tech-docs.hmpps.service.justice.gov.uk/common-kotlin-patterns/).
 If this documentation is incorrect or needs improving please report to [#ask-prisons-digital-sre](https://moj.enterprise.slack.com/archives/C06MWP0UKDE)
-or [raise a PR](https://github.com/ministryofjustice/hmpps-tech-docs). 
+or [raise a PR](https://github.com/ministryofjustice/hmpps-tech-docs).
 
 ## Running the application locally
 
