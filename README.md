@@ -33,9 +33,8 @@ If you only need the kotlin configuration then remove all typescript references 
 
 To ensure the correct github teams can approve releases, you will need to make changes to the configuration in `resources/service-account-github` where the appropriate team names will need to be added (based on [lines 98-100](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev/resources/serviceaccount-github.tf#L98) and the reference appended to the teams list below [line 112](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-templates-dev/resources/serviceaccount-github.tf#L112)). Note: hmpps-sre is in this list to assist with deployment issues.
 
-Submit a PR to the Cloud Platform team in
-# ask-cloud-platform. Further instructions from the Cloud Platform team can be found in
-the [Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
+Submit a PR to the Cloud Platform team in [#ask-cloud-platform](https://moj.enterprise.slack.com/archives/C57UPMZLY).
+Further instructions from the Cloud Platform team can be found in the [Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
 
 ## Renaming from HMPPS Template Kotlin - github Actions
 
@@ -89,7 +88,7 @@ lost within non-production issues.
 ### Production kubernetes alerts
 
 This is the severity label for production, determined by the `custom severity label`. See the above
-# non-production-kubernetes-alerts for more information. This is configured in `helm_deploy/values-prod.yaml`.
+[Non production kubernetes alerts section](non-production-kubernetes-alerts) for more information. This is configured in `helm_deploy/values-prod.yaml`.
 
 ### Product ID
 
