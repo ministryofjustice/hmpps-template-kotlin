@@ -1,4 +1,3 @@
-version: "3"
 services:
   hmpps-template-kotlin:
     build:
