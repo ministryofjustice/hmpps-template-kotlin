@@ -1,4 +1,5 @@
-FROM --platform=$BUILDPLATFORM ghcr.io/ministryofjustice/hmpps-eclipse-temurin:25-jre-jammy AS builder
+ARG BASE_IMAGE=ghcr.io/ministryofjustice/hmpps-eclipse-temurin:25-jre-jammy
+FROM --platform=$BUILDPLATFORM ${BASE_IMAGE} AS builder
 
 ARG BUILD_NUMBER
 ENV BUILD_NUMBER=${BUILD_NUMBER:-1_0_0}
@@ -7,7 +8,7 @@ WORKDIR /builder
 COPY hmpps-template-kotlin-${BUILD_NUMBER}.jar app.jar
 RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
-FROM ghcr.io/ministryofjustice/hmpps-eclipse-temurin:25-jre-jammy
+FROM ${BASE_IMAGE}
 
 ARG BUILD_NUMBER
 ENV BUILD_NUMBER=${BUILD_NUMBER:-1_0_0}
