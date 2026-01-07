@@ -12,7 +12,6 @@ FROM ghcr.io/ministryofjustice/hmpps-eclipse-temurin:25-jre-jammy
 ARG BUILD_NUMBER
 ENV BUILD_NUMBER=${BUILD_NUMBER:-1_0_0}
 
-WORKDIR /app
 COPY --chown=appuser:appgroup applicationinsights.json ./
 COPY --chown=appuser:appgroup applicationinsights.dev.json ./
 COPY --chown=appuser:appgroup applicationinsights-agent*.jar ./agent.jar
