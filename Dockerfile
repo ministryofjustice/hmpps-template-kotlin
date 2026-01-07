@@ -7,8 +7,7 @@ WORKDIR /builder
 COPY hmpps-template-kotlin-${BUILD_NUMBER}.jar app.jar
 RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
-FROM ghcr.io/ministryofjustice/hmpps-eclipse-temurin:25-jre-jammy 
-LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
+FROM ghcr.io/ministryofjustice/hmpps-eclipse-temurin:25-jre-jammy
 
 ARG BUILD_NUMBER
 ENV BUILD_NUMBER=${BUILD_NUMBER:-1_0_0}
