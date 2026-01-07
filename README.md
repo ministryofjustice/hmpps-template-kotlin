@@ -134,3 +134,23 @@ docker compose pull && docker compose up --scale hmpps-template-kotlin=0
 
 will just start a docker instance of HMPPS Auth. The application should then be started with a `dev` active profile
 in Intellij.
+
+### Building and running the docker image locally
+
+The `Dockerfile` relies on the application being built first. Steps to build the docker image:
+1. Build the jar files
+```
+./gradlew clean assemble
+```
+2. Copy the jar files to the base directory so that the docker build can find them
+```
+cp build/libs/*.jar .
+```
+3. Build the docker image with required arguments
+```
+docker build --build-arg GIT_REF=21345 --build-arg GIT_BRANCH=bob --build-arg BUILD_NUMBER=$(date '+%Y-%m-%d') .
+```
+4. Run the docker image, setting the auth url so that it starts up
+```
+docker run -e HMPPS_AUTH_URL="https://sign-in-dev.hmpps.service.justice.gov.uk/auth" <sha from step 3>
+```
