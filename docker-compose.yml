@@ -1,7 +1,6 @@
 services:
   hmpps-template-kotlin:
-    build:
-      context: .
+    image: ghcr.io/ministryofjustice/hmpps-template-kotlin:latest
     networks:
       - hmpps
     container_name: hmpps-template-kotlin
