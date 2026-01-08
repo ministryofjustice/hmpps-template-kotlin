@@ -124,7 +124,7 @@ instance of HMPPS Auth (required if your service calls out to other services usi
 docker compose pull && docker compose up
 ```
 
-will build the application and run it and HMPPS Auth within a local docker instance.
+will run the application and HMPPS Auth within a local docker instance.
 
 ### Running the application in Intellij
 
