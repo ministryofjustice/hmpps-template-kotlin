@@ -16,9 +16,18 @@ generic-service:
 
   # Environment variables to load into the deployment
   env:
-    JAVA_OPTS: "-Xmx512m"
     SERVER_PORT: "8080"
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
+    # JAVA_TOOL_OPTIONS is set in the base image (hmpps-eclipse-temurin) with:
+    #   -XX:MaxRAMPercentage=60.0
+    # Uncomment below to override memory settings if needed.
+    # Check resources.limits.memory is set appropriately.
+    #
+    # Percentage-based example:
+    #   JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+    #
+    # Fixed memory example:
+    #   JAVA_TOOL_OPTIONS: "-Xms512m -Xmx1024m"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
