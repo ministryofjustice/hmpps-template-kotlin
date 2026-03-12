@@ -1,8 +1,8 @@
-# CLAUDE.md
+# Money to prisoners API
 
 ## Project Overview
 
-Money to Prisoners API — Kotlin Spring Boot microservice and internal admin interface for the Prisoner Money suite of apps. Handles prisoner money transfers, credits, disbursements, payments, and related security/account management. Built from the [hmpps-template-kotlin](https://github.com/ministryofjustice/hmpps-template-kotlin) template.
+A Kotlin Spring Boot microservice and internal admin interface for the Prisoner Money suite of apps. Handles prisoner money transfers, credits, disbursements, payments, and related security/account management.
 
 ## Tech Stack
 
@@ -13,6 +13,30 @@ Money to Prisoners API — Kotlin Spring Boot microservice and internal admin in
 - Docker & Docker Compose for local services
 - Kubernetes + Helm for deployment
 - HMPPS Auth for authentication
+
+## Development Rules & Workflow
+
+### Test-Driven Development (TDD) - NON-NEGOTIABLE
+*   **Write Tests First**: Every single line of production code must be written in response to a failing test.
+*   **Red-Green-Refactor**:
+  1.  **Red**: Write a minimal failing test. Confirm it fails.
+  2.  **Green**: Implement the simplest code to make the test pass.
+  3.  **Refactor**: Clean up the code while keeping tests green.
+*   **No Code Without Tests**: Do not implement features, bug fixes, or refactors without corresponding test cases.
+*   **Keep Tests Passing**: After every code edit, ensure the test suite passes.
+
+### Testing Standards
+*   **Framework**: Use JUnit 5 and Mockito for all testing.
+*   **Coverage**: Aim for 100% coverage on new logic.
+*   **Isolation**: Tests must be unit-tested in isolation where possible.
+
+### Workflow Commands
+*   Run tests: `./gradlew test`
+*   Run linter: `./gradlew ktlintFormat`
+
+### Guidelines
+*   Think deeply before making any edits.
+*   If you find yourself writing production code without a failing test, STOP immediately and write the test first.
 
 ## Common Commands
 
@@ -31,7 +55,7 @@ BUILD_NUMBER=1_0_0 ./gradlew assemble check      # full verify with version
 docker compose pull && docker compose up
 
 # Run only dependencies (for IntelliJ / local dev)
-docker compose pull && docker compose up --scale money-to-prisoners-api=0
+docker compose pull && docker compose up --scale hmpps-money-to-prisoners-api=0
 # Then run the app in your IDE with Spring profile: dev
 ```
 
@@ -106,7 +130,7 @@ Dockerfile            # Multi-stage container build
 
 - GitHub Actions pipeline: lint, test, build Docker image, push to `ghcr.io/ministryofjustice`, deploy via Helm.
 - Security scanning: CodeQL, OWASP dependency checks, Trivy container scans, Veracode.
-- Docker image registry: `ghcr.io/ministryofjustice/money-to-prisoners-api`
+- Docker image registry: `ghcr.io/ministryofjustice/hmpps-money-to-prisoners-api`
 
 ## Key Dependencies
 

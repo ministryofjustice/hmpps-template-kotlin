@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.templatepackagename
+package uk.gov.justice.digital.hmpps.moneytoprisonersapi
 
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping

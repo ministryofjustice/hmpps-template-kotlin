@@ -1,9 +1,9 @@
 ---
-# Per environment values which override defaults in hmpps-template-kotlin/values.yaml
+# Per environment values which override defaults in hmpps-money-to-prisoners-api/values.yaml
 
 generic-service:
   ingress:
-    host: template-kotlin.hmpps.service.justice.gov.uk
+    host: money-to-prisoners-api.hmpps.service.justice.gov.uk
 
   env:
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"

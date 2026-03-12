@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.templatepackagename.config
+package uk.gov.justice.digital.hmpps.moneytoprisonersapi.config
 
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Contact
@@ -17,9 +17,9 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
   fun customOpenAPI(): OpenAPI = OpenAPI()
     .servers(
       listOf(
-        Server().url("https://template-kotlin-dev.hmpps.service.justice.gov.uk").description("Development"),
-        Server().url("https://template-kotlin-preprod.hmpps.service.justice.gov.uk").description("Pre-Production"),
-        Server().url("https://template-kotlin.hmpps.service.justice.gov.uk").description("Production"),
+        Server().url("https://money-to-prisoners-api-dev.hmpps.service.justice.gov.uk").description("Development"),
+        Server().url("https://money-to-prisoners-api-preprod.hmpps.service.justice.gov.uk").description("Pre-Production"),
+        Server().url("https://money-to-prisoners-api.hmpps.service.justice.gov.uk").description("Production"),
         Server().url("http://localhost:8080").description("Local"),
       ),
     )
@@ -27,7 +27,7 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
       listOf(),
     )
     .info(
-      Info().title("HMPPS Template Kotlin").version(version)
+      Info().title("HMPPS Money to Prisoners API").version(version)
         .contact(Contact().name("HMPPS Digital Studio").email("feedback@digital.justice.gov.uk")),
     )
   // TODO Add security schema and roles in `.components()` and `.addSecurityItem()`

@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.templatepackagename.integration
+package uk.gov.justice.digital.hmpps.moneytoprisonersapi.integration
 
 import io.swagger.v3.parser.OpenAPIV3Parser
 import net.minidev.json.JSONArray

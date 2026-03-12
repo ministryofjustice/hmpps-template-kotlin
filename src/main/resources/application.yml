@@ -1,10 +1,10 @@
 info.app:
-  name: HMPPS Template Kotlin
+  name: HMPPS Money to Prisoners API
   version: 1.0
 
 spring:
   application:
-    name: hmpps-template-kotlin
+    name: hmpps-money-to-prisoners-api
 
 #  This jackson configuration is only applied for java.util.Date.
 #  It is ignored for LocalDateTime, and therefore unnecessary for most projects

@@ -1,6 +1,6 @@
 @file:Suppress("ktlint:standard:filename")
 
-package uk.gov.justice.digital.hmpps.templatepackagename.health
+package uk.gov.justice.digital.hmpps.moneytoprisonersapi.health
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
