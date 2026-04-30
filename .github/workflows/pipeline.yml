@@ -20,6 +20,8 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
+  attestations: write
 
 concurrency:
   # Only cancel in progress when on a branch - use SHA on main to ensure uniqueness.
@@ -70,6 +72,9 @@ jobs:
       push: ${{ inputs.push || inputs.push == null }}
       docker_multiplatform: false
       download_build_artifacts: true
+      generate_sbom: true
+      attach_sbom_to_registry: true
+      sign_image: true
   deploy_dev:
     name: Deploy to the development environment
     needs:
