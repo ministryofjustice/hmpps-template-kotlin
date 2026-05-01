@@ -32,25 +32,6 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  # main node build workflow
-  node_build:
-    name: node build
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
-    secrets: inherit
-    with: 
-      install_command: 'npm run setup'
-  # generic node unit tests - feel free to override with local tests if required
-  node_unit_tests:
-    name: node unit tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
-    needs: [node_build]
-    secrets: inherit
-  # generic node integration tests using wiremock - feel free to override with local tests if required
-  node_integration_tests:
-    name: node integration tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
-    needs: [node_build]
-    secrets: inherit
   helm_lint:
     strategy:
       matrix:
@@ -60,19 +41,37 @@ jobs:
     secrets: inherit
     with:
       environment: ${{ matrix.environments }}
+  app_version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.app_version.outputs.version }}
+    steps:
+      - id: app_version
+        name: Application version creators
+        uses: ministryofjustice/hmpps-github-shared-actions/.github/actions/build-test-and-deploy/create_app_version@fddc5f11d6a8ce9b82a06fe76268835bfd99bcd4 # v1
+  gradle_verify:
+    name: Validate the kotlin
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_verify.yml@v2 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      gradle-command: 'BUILD_NUMBER=${{ needs.app_version.outputs.version}} ./gradlew assemble check'
+      upload-build-artifacts: ${{ github.ref == 'refs/heads/main' }}
+      java-version: "25"
+    needs:
+      - app_version
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
-      - node_integration_tests
-      - node_unit_tests
+      - gradle_verify
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
       additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || inputs.push == null }}
       docker_multiplatform: false
+      download_build_artifacts: true
       generate_sbom: true
       attach_sbom_to_registry: true
       sign_image: true
@@ -109,3 +108,4 @@ jobs:
   #     environment: 'prod'
   #     app_version: '${{ needs.build.outputs.app_version }}'
   #     slack_notification: 'false' # if 'true', it needs a valid PROD_RELEASES_SLACK_CHANNEL variable to be set
+  
