@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
 import java.time.LocalDate
@@ -15,6 +17,9 @@ import java.time.format.DateTimeFormatter
 class OpenApiDocsTest : IntegrationTestBase() {
   @LocalServerPort
   private val port: Int = 0
+
+  @Autowired
+  private lateinit var buildProperties: BuildProperties
 
   @Test
   fun `open api docs are available`() {
@@ -71,7 +76,7 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .exchange()
       .expectStatus().isOk
       .expectBody().jsonPath("info.version").value<String> {
-        assertThat(it).startsWith(DateTimeFormatter.ISO_DATE.format(LocalDate.now()))
+        assertThat(it).isEqualTo(buildProperties.version)
       }
   }
 
