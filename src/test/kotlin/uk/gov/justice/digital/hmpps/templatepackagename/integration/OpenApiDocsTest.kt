@@ -12,12 +12,10 @@ import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
 
-class OpenApiDocsTest : IntegrationTestBase() {
-  @LocalServerPort
-  private val port: Int = 0
-
-  @Autowired
-  private lateinit var buildProperties: BuildProperties
+class OpenApiDocsTest(
+  @Autowired private val buildProperties: BuildProperties,
+  @LocalServerPort private val port: Int = 0,
+) : IntegrationTestBase() {
 
   @Test
   fun `open api docs are available`() {
@@ -73,9 +71,7 @@ class OpenApiDocsTest : IntegrationTestBase() {
       .accept(MediaType.APPLICATION_JSON)
       .exchange()
       .expectStatus().isOk
-      .expectBody().jsonPath("info.version").value<String> {
-        assertThat(it).isEqualTo(buildProperties.version)
-      }
+      .expectBody().jsonPath("info.version").isEqualTo(buildProperties.version)
   }
 
   @Test
