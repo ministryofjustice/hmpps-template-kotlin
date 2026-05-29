@@ -4,7 +4,8 @@
 generic-service:
   ingress:
     host: template-kotlin.hmpps.service.justice.gov.uk
-
+    # modsecurity_enabled: true
+    
   env:
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
 
