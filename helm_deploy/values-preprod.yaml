@@ -13,8 +13,6 @@ generic-service:
 
   scheduledDowntime:
     enabled: true
-    startup: '33 6 * * 1-5' # Start at 6.33am UTC Monday-Friday
-    shutdown: '45 21 * * 1-5' # Stop at 9.45pm UTC Monday-Friday
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
