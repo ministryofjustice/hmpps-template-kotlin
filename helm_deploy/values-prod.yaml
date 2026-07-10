@@ -9,7 +9,7 @@ generic-service:
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
 
   allowlist:
-    # remove groups as appropriate to give the minimum access required:
+    # remove groups as appropriate to give the minimum ingress access required:
     #   digital_staff_and_mojo: devices on the MoJ network
     #   moj_cloud_platform: services on Cloud Platform
     groups:
