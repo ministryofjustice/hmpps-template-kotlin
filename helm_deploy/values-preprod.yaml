@@ -6,7 +6,8 @@ generic-service:
 
   ingress:
     host: template-kotlin-preprod.hmpps.service.justice.gov.uk
-
+    # modsecurity_enabled: true
+    
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: "applicationinsights.dev.json"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
