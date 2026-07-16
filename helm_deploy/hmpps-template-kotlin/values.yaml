@@ -38,9 +38,5 @@ generic-service:
     hmpps-template-kotlin-application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
 
-  allowlist:
-    groups:
-      - internal
-
 generic-prometheus-alerts:
   targetApplication: hmpps-template-kotlin
