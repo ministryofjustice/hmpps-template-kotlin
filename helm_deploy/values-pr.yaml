@@ -1,0 +1,41 @@
+---
+# Per environment values which override defaults in hmpps-template-kotlin/values.yaml
+
+generic-service:
+  nameOverride: $RELEASE_NAME
+  replicaCount: 1
+
+  ingress:
+    host: pr-$PR_NUMBER.template-kotlin-dev.hmpps.service.justice.gov.uk
+
+  env:
+    APPLICATIONINSIGHTS_CONFIGURATION_FILE: "applicationinsights.dev.json"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    # Template kotlin calls out to itself to provide an example of a service call
+    # TODO: This should be replaced by a call to a different service, or removed
+    EXAMPLE_API_URL: "https://pr-$PR_NUMBER.template-kotlin-dev.hmpps.service.justice.gov.uk"
+
+  # Example: deploy a temporary Postgres container as part of the deployment.
+  # It can then be accessed by the app at http://postgres:5432/
+  #
+  # extraContainers:
+  #  - name: postgres
+  #    image: postgres:15
+  #    imagePullPolicy: IfNotPresent
+  #    env:
+  #      - name: POSTGRES_DB
+  #        value: mydatabase
+  #      - name: POSTGRES_USER
+  #        value: myuser
+  #      - name: POSTGRES_PASSWORD
+  #        value: mypassword
+  #    ports:
+  #      - name: postgres
+  #        containerPort: 5432
+  #        protocol: TCP
+
+# CloudPlatform AlertManager receiver to route prometheus alerts to slack
+# See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
+generic-prometheus-alerts:
+  targetApplication: $RELEASE_NAME
+  alertSeverity: NON_PROD_ALERTS_SEVERITY_LABEL
