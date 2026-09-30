@@ -33,6 +33,15 @@ class ExampleResourceTest : IntegrationTestBase() {
     }
 
     @Test
+    fun `should return method not allowed if wrong http method`() {
+      webTestClient.put()
+        .uri("/example/time")
+        .headers(setAuthorisation(roles = listOf("ROLE_TEMPLATE_KOTLIN__UI")))
+        .exchange()
+        .expectStatus().isEqualTo(405)
+    }
+
+    @Test
     fun `should return forbidden if wrong role`() {
       webTestClient.get()
         .uri("/example/time")
