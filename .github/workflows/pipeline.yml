@@ -76,6 +76,8 @@ jobs:
       generate_sbom: true
       attach_sbom_to_registry: true
       sign_image: true
+    secrets:
+      ECR_ROLE_TO_ASSUME: ${{ secrets.ECR_ROLE_TO_ASSUME}}
   deploy_dev:
     name: Deploy to the development environment
     permissions:
