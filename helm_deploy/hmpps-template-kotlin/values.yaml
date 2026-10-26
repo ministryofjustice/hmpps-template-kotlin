@@ -18,16 +18,20 @@ generic-service:
   env:
     SERVER_PORT: "8080"
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
+    APPLICATIONINSIGHTS_STATSBEAT_DISABLED: "true" # Disable Application Insights statsbeat telemetry
     # JAVA_TOOL_OPTIONS is set in the base image (hmpps-eclipse-temurin) with:
     #   -XX:MaxRAMPercentage=50.0
     # Uncomment below to override memory settings if needed.
+    # When using proxy, merge $(JAVA_PROXY_TOOL_OPTIONS) with your settings:
+    #   JAVA_TOOL_OPTIONS: "$(JAVA_PROXY_TOOL_OPTIONS) -XX:MaxRAMPercentage=75.0"
+    #
     # Check resources.limits.memory is set appropriately.
     #
     # Percentage-based example:
-    #   JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+    #   JAVA_TOOL_OPTIONS: "$(JAVA_PROXY_TOOL_OPTIONS) -XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
     #
     # Fixed memory example:
-    #   JAVA_TOOL_OPTIONS: "-Xms512m -Xmx1024m"
+    #   JAVA_TOOL_OPTIONS: "$(JAVA_PROXY_TOOL_OPTIONS) -Xms512m -Xmx1024m"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -37,6 +41,17 @@ generic-service:
   namespace_secrets:
     hmpps-template-kotlin-application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
+    # Uncomment the section below when your namespace has egress controls deployed.
+    # This is required for services to route outbound HTTPS traffic through the Envoy proxy.
+    # See: https://tech-docs.hmpps.service.justice.gov.uk/service-standard/egress-controls
+    # hmpps-envoy-https-proxy-env:
+    #   HTTP_PROXY: "HTTP_PROXY"
+    #   HTTPS_PROXY: "HTTPS_PROXY"
+    #   NO_PROXY: "NO_PROXY"
+    #   http_proxy: "HTTP_PROXY"
+    #   https_proxy: "HTTPS_PROXY"
+    #   no_proxy: "NO_PROXY"
+    #   JAVA_PROXY_TOOL_OPTIONS: "JAVA_PROXY_TOOL_OPTIONS"
 
 generic-prometheus-alerts:
   targetApplication: hmpps-template-kotlin
