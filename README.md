@@ -154,3 +154,25 @@ docker build --build-arg GIT_REF=21345 --build-arg GIT_BRANCH=bob --build-arg BU
 ```
 docker run -e HMPPS_AUTH_URL="https://sign-in-dev.hmpps.service.justice.gov.uk/auth" <sha from step 3>
 ```
+
+## Testing the application
+
+You first need to generate an authorization token by running the following command in a terminal.
+
+Note: This will copy the generated token to your clipboard.
+
+```
+curl -X POST "http://localhost:8090/auth/oauth/token" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Basic $(echo -n "hmpps-typescript-template-system:clientsecret" | base64)" -d "grant_type=client_credentials" | jq .access_token -r | pbcopy
+```
+
+You can check the token https://jwt.io and pasting it in.
+
+Then use the following command to send a request to the application. You must paste the token just before the final closing quote.
+
+```
+curl -X GET "http://localhost:8080/example/time" -i -H "Authorization: Bearer "
+```
+
+Note: You need to retain the space after the word ```Bearer```.
+
+*Please note that tokens are only valid for a specified time so you will need to generate one again if reissuing the above command.*
