@@ -7,10 +7,10 @@ dependencies {
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.1.0")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-webclient")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.1")
   // Temporarily pin swagger-ui for dompurify issues CVE-2026-11680(2-4)
   constraints {
-    implementation("org.webjars:swagger-ui:5.34.1")
+    implementation("org.webjars:swagger-ui:5.36.0")
   }
 
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.1.0")
